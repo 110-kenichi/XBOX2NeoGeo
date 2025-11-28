@@ -351,13 +351,15 @@ namespace Zanac.XBOX2NeoGeo
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownFireRate = new System.Windows.Forms.NumericUpDown();
             this.checkBoxDinput = new System.Windows.Forms.CheckBox();
-            this.timerRapid = new System.Windows.Forms.Timer(this.components);
             this.timerPole = new System.Windows.Forms.Timer(this.components);
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanelCheck.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCtrlId)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFireRate)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelCheck
@@ -3091,7 +3093,7 @@ namespace Zanac.XBOX2NeoGeo
             // 
             this.checkBox181.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox181.AutoSize = true;
-            this.checkBox181.Checked = this.checkBox181.Checked = global::XBOX2NeoGeo.Properties.Settings.Default.PAR1;
+            this.checkBox181.Checked = global::XBOX2NeoGeo.Properties.Settings.Default.PAR1;
             this.checkBox181.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::XBOX2NeoGeo.Properties.Settings.Default, "PAR1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.checkBox181.Location = new System.Drawing.Point(562, 187);
             this.checkBox181.Name = "checkBox181";
@@ -3103,7 +3105,7 @@ namespace Zanac.XBOX2NeoGeo
             // 
             this.checkBox182.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox182.AutoSize = true;
-            this.checkBox182.Checked = this.checkBox182.Checked = global::XBOX2NeoGeo.Properties.Settings.Default.PAR2;
+            this.checkBox182.Checked = global::XBOX2NeoGeo.Properties.Settings.Default.PAR2;
             this.checkBox182.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::XBOX2NeoGeo.Properties.Settings.Default, "PAR2", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.checkBox182.Location = new System.Drawing.Point(562, 207);
             this.checkBox182.Name = "checkBox182";
@@ -4143,7 +4145,7 @@ namespace Zanac.XBOX2NeoGeo
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(3, 500);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(111, 25);
+            this.label2.Size = new System.Drawing.Size(109, 25);
             this.label2.TabIndex = 2;
             this.label2.Text = "FTDI Port:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4176,13 +4178,13 @@ namespace Zanac.XBOX2NeoGeo
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(618, 587);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(618, 594);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // numericUpDownPort
             // 
             this.numericUpDownPort.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::XBOX2NeoGeo.Properties.Settings.Default, "FTDIPort", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDownPort.Location = new System.Drawing.Point(120, 503);
+            this.numericUpDownPort.Location = new System.Drawing.Point(118, 503);
             this.numericUpDownPort.Maximum = new decimal(new int[] {
             255,
             0,
@@ -4210,7 +4212,7 @@ namespace Zanac.XBOX2NeoGeo
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Location = new System.Drawing.Point(3, 525);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(111, 25);
+            this.label3.Size = new System.Drawing.Size(109, 25);
             this.label3.TabIndex = 2;
             this.label3.Text = "XBOX Controller No:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4218,7 +4220,7 @@ namespace Zanac.XBOX2NeoGeo
             // numericUpDownCtrlId
             // 
             this.numericUpDownCtrlId.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::XBOX2NeoGeo.Properties.Settings.Default, "ControllerId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDownCtrlId.Location = new System.Drawing.Point(120, 528);
+            this.numericUpDownCtrlId.Location = new System.Drawing.Point(118, 528);
             this.numericUpDownCtrlId.Maximum = new decimal(new int[] {
             3,
             0,
@@ -4235,15 +4237,16 @@ namespace Zanac.XBOX2NeoGeo
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Location = new System.Drawing.Point(3, 550);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(111, 25);
+            this.label5.Size = new System.Drawing.Size(109, 25);
             this.label5.TabIndex = 2;
-            this.label5.Text = "Rapid Fire Rate[ms]:";
+            this.label5.Text = "Rapid Fire Rate[Hz]:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // numericUpDownFireRate
             // 
             this.numericUpDownFireRate.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::XBOX2NeoGeo.Properties.Settings.Default, "FireRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDownFireRate.Location = new System.Drawing.Point(120, 553);
+            this.numericUpDownFireRate.DecimalPlaces = 10;
+            this.numericUpDownFireRate.Location = new System.Drawing.Point(118, 553);
             this.numericUpDownFireRate.Minimum = new decimal(new int[] {
             1,
             0,
@@ -4268,25 +4271,36 @@ namespace Zanac.XBOX2NeoGeo
             this.checkBoxDinput.Text = "Use DirectInput(1st Joystick only)";
             this.checkBoxDinput.UseVisualStyleBackColor = true;
             // 
-            // timerRapid
-            // 
-            this.timerRapid.Enabled = true;
-            this.timerRapid.Tick += new System.EventHandler(this.timerRapid_Tick);
-            // 
             // timerPole
             // 
             this.timerPole.Enabled = true;
             this.timerPole.Interval = 16;
             this.timerPole.Tick += new System.EventHandler(this.timerController_Tick);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 596);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(642, 22);
+            this.statusStrip1.TabIndex = 4;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(642, 611);
+            this.ClientSize = new System.Drawing.Size(642, 618);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Name = "FormMain";
-            this.Text = "XBOX2NeoGeo V1.0";
+            this.Text = "XBOX2NeoGeo V1.1";
             this.tableLayoutPanelCheck.ResumeLayout(false);
             this.tableLayoutPanelCheck.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -4294,13 +4308,15 @@ namespace Zanac.XBOX2NeoGeo
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCtrlId)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFireRate)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Timer timerRapid;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelCheck;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelDPadUp;
@@ -4622,6 +4638,8 @@ namespace Zanac.XBOX2NeoGeo
         private System.Windows.Forms.CheckBox checkBox272;
         private System.Windows.Forms.CheckBox checkBox273;
         private System.Windows.Forms.CheckBox checkBox274;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

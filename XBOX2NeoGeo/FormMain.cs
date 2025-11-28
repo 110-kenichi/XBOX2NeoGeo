@@ -1,11 +1,15 @@
 ﻿using FTD2XX_NET;
+using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Management;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,6 +27,9 @@ namespace Zanac.XBOX2NeoGeo
         public const int FTDI_BAUDRATE_MUL = 100;
 
         private FTD2XX_NET.FTDI ftdi = new FTD2XX_NET.FTDI();
+
+        // High resolution timers to replace designer System.Windows.Forms.Timer
+        private HighResolutionTimer hrRapidTimer;
 
         public FormMain()
         {
@@ -51,7 +58,25 @@ namespace Zanac.XBOX2NeoGeo
             restoreCheckStatus(21, Settings.Default.Back);
             restoreCheckStatus(22, Settings.Default.Start);
 
-            timerRapid.Interval = (int)numericUpDownFireRate.Value;
+            // Rapid fire timer (uses numericUpDownFireRate in ms)
+            UpdateRapidTimer();
+        }
+
+        private void UpdateRapidTimer()
+        {
+            // recreate rapid timer with new interval
+            hrRapidTimer?.Stop();
+            long intervalNs = (long)(1_000_000_000m / numericUpDownFireRate.Value);
+            hrRapidTimer = new HighResolutionTimer(() =>
+            {
+                try
+                {
+                    if (!IsDisposed && !Disposing)
+                        BeginInvoke(new Action(() => timerRapid_Tick(this, EventArgs.Empty)));
+                }
+                catch { }
+            }, intervalNs, useTimeBeginPeriod: true);
+            hrRapidTimer.Start();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -80,6 +105,9 @@ namespace Zanac.XBOX2NeoGeo
             Settings.Default.RBumper = storeCheckStatus(20);
             Settings.Default.Back = storeCheckStatus(21);
             Settings.Default.Start = storeCheckStatus(22);
+
+            // stop and dispose high resolution timers
+            try { hrRapidTimer?.Stop(); hrRapidTimer?.Dispose(); hrRapidTimer = null; } catch { }
         }
 
         private void restoreCheckStatus(int rowNo, int val)
@@ -337,6 +365,8 @@ namespace Zanac.XBOX2NeoGeo
             lastGamePadState = stat;
         }
 
+        private string serialNumber;
+
         private void checkBoxConn_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxConn.Checked)
@@ -344,6 +374,8 @@ namespace Zanac.XBOX2NeoGeo
                 var stat = ftdi.OpenByIndex((uint)numericUpDownPort.Value);
                 if (stat == FTDI.FT_STATUS.FT_OK)
                 {
+                    ftdi.GetSerialNumber(out serialNumber);
+                    toolStripStatusLabel1.Text = "Connected to: " + serialNumber;
                     ftdi.SetBaudRate(FTDI_BAUDRATE * FTDI_BAUDRATE_MUL);
                     ftdi.SetTimeouts(500, 500);
                     ftdi.SetLatency(0);
@@ -371,13 +403,169 @@ namespace Zanac.XBOX2NeoGeo
             else
             {
                 ftdi.Close();
+                toolStripStatusLabel1.Text = "";
+                serialNumber = null;
             }
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            timerRapid.Interval = (int)numericUpDownFireRate.Value;
+            // Update high resolution rapid timer interval
+            try
+            {
+                UpdateRapidTimer();
+            }
+            catch
+            {
+                // no fallback to designer timer; hrRapidTimer expected
+            }
         }
 
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            RegisterHidNotification();
+            base.OnHandleCreated(e);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case Win32.WM_DEVICECHANGE: OnDeviceChange(ref m); break;
+            }
+            base.WndProc(ref m);
+        }
+
+        void OnDeviceChange(ref Message msg)
+        {
+            int wParam = (int)msg.WParam;
+            if (wParam == Win32.DBT_DEVICEARRIVAL)
+            {
+                if (!ftdi.IsOpen && serialNumber != null)
+                {
+                    var stat = ftdi.OpenBySerialNumber(serialNumber);
+                    if (stat == FTDI.FT_STATUS.FT_OK)
+                    {
+                        ftdi.GetSerialNumber(out serialNumber);
+                        toolStripStatusLabel1.Text = "Connected to: " + serialNumber;
+                        ftdi.SetBaudRate(FTDI_BAUDRATE * FTDI_BAUDRATE_MUL);
+                        ftdi.SetTimeouts(500, 500);
+                        ftdi.SetLatency(0);
+                        ftdi.SetBitMode(0x00, FTDI.FT_BIT_MODES.FT_BIT_MODE_MPSSE);
+
+                        uint bytesWritten = 0;
+
+                        // 0x80 MPSSEコマンド: Write Low Byte
+                        // 0xXX Bit data for AD pis
+                        // 0xFF Output
+                        byte[] ad_data = { 0x80, (byte)0xFF, 0xFF };
+                        ftdi.Write(ad_data, ad_data.Length, ref bytesWritten);
+
+                        // 0x82 MPSSEコマンド: Write High Byte
+                        // 0xXX Bit data for AC pis
+                        // 0xFF Output
+                        byte[] ac_data = { 0x82, (byte)0x0F, 0xFF };
+                        ftdi.Write(ac_data, ac_data.Length, ref bytesWritten);
+                    }
+                }
+            }
+            else if (wParam == Win32.DBT_DEVICEREMOVECOMPLETE)
+            {
+                UInt32 ftdiDeviceCount = 0;
+                FTDI.FT_STATUS ftStatus = FTDI.FT_STATUS.FT_OK;
+                ftStatus = ftdi.GetNumberOfDevices(ref ftdiDeviceCount);
+                if (ftStatus != FTDI.FT_STATUS.FT_OK)
+                    return;
+
+                FTDI.FT_DEVICE_INFO_NODE[] devList = new FTDI.FT_DEVICE_INFO_NODE[ftdiDeviceCount];
+                ftdi.GetDeviceList(devList);
+                foreach (var dev in devList)
+                {
+                    if (dev.SerialNumber == serialNumber)
+                        return;
+                }
+                ftdi.Close();
+                toolStripStatusLabel1.Text = "Disconnecting...: " + serialNumber;
+            }
+        }
+
+        void RegisterHidNotification()
+        {
+            Win32.DEV_BROADCAST_DEVICEINTERFACE dbi = new
+            Win32.DEV_BROADCAST_DEVICEINTERFACE();
+            int size = Marshal.SizeOf(dbi);
+            dbi.dbcc_size = size;
+            dbi.dbcc_devicetype = Win32.DBT_DEVTYP_DEVICEINTERFACE;
+            dbi.dbcc_reserved = 0;
+            dbi.dbcc_classguid = Win32.GUID_DEVINTERFACE_HID;
+            dbi.dbcc_name = 0;
+            IntPtr buffer = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(dbi, buffer, true);
+            IntPtr r = Win32.RegisterDeviceNotification(Handle, buffer,
+            Win32.DEVICE_NOTIFY_WINDOW_HANDLE);
+            if (r == IntPtr.Zero)
+            {
+                //label1.Text = Win32.GetLastError().ToString();
+            }
+        }
     }
+
+    class Win32
+    {
+        public const int
+        WM_DEVICECHANGE = 0x0219;
+        public const int
+        DBT_DEVICEARRIVAL = 0x8000,
+        DBT_DEVICEREMOVECOMPLETE = 0x8004;
+        public const int
+        DEVICE_NOTIFY_WINDOW_HANDLE = 0,
+        DEVICE_NOTIFY_SERVICE_HANDLE = 1;
+        public const int
+        DBT_DEVTYP_DEVICEINTERFACE = 5;
+        public static Guid
+        GUID_DEVINTERFACE_HID = new Guid("4D1E55B2-F16F-11CF-88CB-001111000030");
+        //Thi code will show you how to detect Human Input Devices (HID) like USB devices, mouse, keyboard, keypad, joystick, etc... If you want to detect all USB devices, uses GUID_DEVINTERFACE_USB_DEVICE = "A5DCBF10-6530-11D2-901F-00C04FB951ED" instead.
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class DEV_BROADCAST_DEVICEINTERFACE
+        {
+            public int dbcc_size;
+            public int dbcc_devicetype;
+            public int dbcc_reserved;
+            public Guid dbcc_classguid;
+            public short dbcc_name;
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr RegisterDeviceNotification(
+        IntPtr hRecipient,
+        IntPtr NotificationFilter,
+        Int32 Flags);
+
+        [DllImport("kernel32.dll")]
+        public static extern int GetLastError();
+
+        public const int DIGCF_PRESENT = 2;
+
+        public static Guid GUID_DEVCLASS_MOUSE = new
+        Guid("4D36E96F-E325-11CE-BFC1-08002BE10318");
+
+        [DllImport("setupapi.dll")]
+        public static extern IntPtr SetupDiGetClassDevs(ref Guid ClassGuid,
+        IntPtr Enumerator, IntPtr hWndParent, int Flags);
+
+        [DllImport("setupapi.dll")]
+        public static extern bool SetupDiEnumDeviceInfo(IntPtr DeviceInfoSet,
+        int Supplies, ref SP_DEVINFO_DATA DeviceInfoData);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SP_DEVINFO_DATA
+        {
+            public int cbSize;
+            public Guid ClassGuid;
+            public int DevInst;
+            public int Reserved;
+        }
+    }
+
 }

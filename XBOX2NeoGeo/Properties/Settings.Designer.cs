@@ -325,7 +325,7 @@ namespace XBOX2NeoGeo.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public decimal FireRate {
             get {
                 return ((decimal)(this["FireRate"]));

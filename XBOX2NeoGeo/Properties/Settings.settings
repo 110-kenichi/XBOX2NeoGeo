@@ -78,7 +78,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="FireRate" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">16</Value>
+      <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="PAL1" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
