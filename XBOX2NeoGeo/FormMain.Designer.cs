@@ -30,7 +30,6 @@ namespace Zanac.XBOX2NeoGeo
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanelCheck = new System.Windows.Forms.TableLayoutPanel();
             this.checkBox43 = new System.Windows.Forms.CheckBox();
             this.checkBox41 = new System.Windows.Forms.CheckBox();
@@ -341,6 +340,32 @@ namespace Zanac.XBOX2NeoGeo
             this.checkBox272 = new System.Windows.Forms.CheckBox();
             this.checkBox273 = new System.Windows.Forms.CheckBox();
             this.checkBox274 = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.checkBox275 = new System.Windows.Forms.CheckBox();
+            this.checkBox276 = new System.Windows.Forms.CheckBox();
+            this.checkBox277 = new System.Windows.Forms.CheckBox();
+            this.checkBox278 = new System.Windows.Forms.CheckBox();
+            this.checkBox279 = new System.Windows.Forms.CheckBox();
+            this.checkBox280 = new System.Windows.Forms.CheckBox();
+            this.checkBox281 = new System.Windows.Forms.CheckBox();
+            this.checkBox282 = new System.Windows.Forms.CheckBox();
+            this.checkBox283 = new System.Windows.Forms.CheckBox();
+            this.checkBox284 = new System.Windows.Forms.CheckBox();
+            this.checkBox285 = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.checkBox286 = new System.Windows.Forms.CheckBox();
+            this.checkBox287 = new System.Windows.Forms.CheckBox();
+            this.checkBox288 = new System.Windows.Forms.CheckBox();
+            this.checkBox289 = new System.Windows.Forms.CheckBox();
+            this.checkBox290 = new System.Windows.Forms.CheckBox();
+            this.checkBox291 = new System.Windows.Forms.CheckBox();
+            this.checkBox292 = new System.Windows.Forms.CheckBox();
+            this.checkBox293 = new System.Windows.Forms.CheckBox();
+            this.checkBox294 = new System.Windows.Forms.CheckBox();
+            this.checkBox295 = new System.Windows.Forms.CheckBox();
+            this.checkBox296 = new System.Windows.Forms.CheckBox();
+            this.checkBox297 = new System.Windows.Forms.CheckBox();
+            this.checkBox298 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -351,7 +376,8 @@ namespace Zanac.XBOX2NeoGeo
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownFireRate = new System.Windows.Forms.NumericUpDown();
             this.checkBoxDinput = new System.Windows.Forms.CheckBox();
-            this.timerPole = new System.Windows.Forms.Timer(this.components);
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanelCheck.SuspendLayout();
@@ -359,13 +385,14 @@ namespace Zanac.XBOX2NeoGeo
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCtrlId)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFireRate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelCheck
             // 
-            this.tableLayoutPanelCheck.ColumnCount = 15;
-            this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanelCheck, 3);
+            this.tableLayoutPanelCheck.ColumnCount = 17;
+            this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanelCheck, 4);
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -375,6 +402,8 @@ namespace Zanac.XBOX2NeoGeo
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanelCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -690,6 +719,32 @@ namespace Zanac.XBOX2NeoGeo
             this.tableLayoutPanelCheck.Controls.Add(this.checkBox272, 10, 22);
             this.tableLayoutPanelCheck.Controls.Add(this.checkBox273, 11, 22);
             this.tableLayoutPanelCheck.Controls.Add(this.checkBox274, 12, 22);
+            this.tableLayoutPanelCheck.Controls.Add(this.label12, 14, 0);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox275, 14, 1);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox276, 14, 2);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox277, 14, 3);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox278, 14, 4);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox279, 14, 13);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox280, 14, 14);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox281, 14, 15);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox282, 14, 16);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox283, 14, 20);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox284, 14, 21);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox285, 14, 22);
+            this.tableLayoutPanelCheck.Controls.Add(this.label13, 15, 0);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox286, 15, 1);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox287, 15, 2);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox288, 15, 3);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox289, 15, 4);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox290, 15, 13);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox291, 15, 14);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox292, 15, 15);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox293, 15, 16);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox294, 15, 20);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox295, 15, 21);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox296, 15, 22);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox297, 15, 18);
+            this.tableLayoutPanelCheck.Controls.Add(this.checkBox298, 14, 18);
             this.tableLayoutPanelCheck.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelCheck.Location = new System.Drawing.Point(3, 15);
             this.tableLayoutPanelCheck.Name = "tableLayoutPanelCheck";
@@ -718,7 +773,7 @@ namespace Zanac.XBOX2NeoGeo
             this.tableLayoutPanelCheck.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelCheck.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelCheck.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelCheck.Size = new System.Drawing.Size(612, 482);
+            this.tableLayoutPanelCheck.Size = new System.Drawing.Size(682, 482);
             this.tableLayoutPanelCheck.TabIndex = 1;
             // 
             // checkBox43
@@ -4129,6 +4184,280 @@ namespace Zanac.XBOX2NeoGeo
             this.checkBox274.ThreeState = true;
             this.checkBox274.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label12.Location = new System.Drawing.Point(597, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(39, 24);
+            this.label12.TabIndex = 183;
+            this.label12.Text = "Toggle";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // checkBox275
+            // 
+            this.checkBox275.AutoSize = true;
+            this.checkBox275.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox275.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox275.Location = new System.Drawing.Point(597, 27);
+            this.checkBox275.Name = "checkBox275";
+            this.checkBox275.Size = new System.Drawing.Size(39, 14);
+            this.checkBox275.TabIndex = 184;
+            this.checkBox275.UseVisualStyleBackColor = false;
+            // 
+            // checkBox276
+            // 
+            this.checkBox276.AutoSize = true;
+            this.checkBox276.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox276.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox276.Location = new System.Drawing.Point(597, 47);
+            this.checkBox276.Name = "checkBox276";
+            this.checkBox276.Size = new System.Drawing.Size(39, 14);
+            this.checkBox276.TabIndex = 184;
+            this.checkBox276.UseVisualStyleBackColor = true;
+            // 
+            // checkBox277
+            // 
+            this.checkBox277.AutoSize = true;
+            this.checkBox277.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox277.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox277.Location = new System.Drawing.Point(597, 67);
+            this.checkBox277.Name = "checkBox277";
+            this.checkBox277.Size = new System.Drawing.Size(39, 14);
+            this.checkBox277.TabIndex = 184;
+            this.checkBox277.UseVisualStyleBackColor = true;
+            // 
+            // checkBox278
+            // 
+            this.checkBox278.AutoSize = true;
+            this.checkBox278.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox278.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox278.Location = new System.Drawing.Point(597, 87);
+            this.checkBox278.Name = "checkBox278";
+            this.checkBox278.Size = new System.Drawing.Size(39, 14);
+            this.checkBox278.TabIndex = 184;
+            this.checkBox278.UseVisualStyleBackColor = true;
+            // 
+            // checkBox279
+            // 
+            this.checkBox279.AutoSize = true;
+            this.checkBox279.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox279.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox279.Location = new System.Drawing.Point(597, 267);
+            this.checkBox279.Name = "checkBox279";
+            this.checkBox279.Size = new System.Drawing.Size(39, 14);
+            this.checkBox279.TabIndex = 184;
+            this.checkBox279.UseVisualStyleBackColor = true;
+            // 
+            // checkBox280
+            // 
+            this.checkBox280.AutoSize = true;
+            this.checkBox280.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox280.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox280.Location = new System.Drawing.Point(597, 287);
+            this.checkBox280.Name = "checkBox280";
+            this.checkBox280.Size = new System.Drawing.Size(39, 14);
+            this.checkBox280.TabIndex = 184;
+            this.checkBox280.UseVisualStyleBackColor = true;
+            // 
+            // checkBox281
+            // 
+            this.checkBox281.AutoSize = true;
+            this.checkBox281.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox281.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox281.Location = new System.Drawing.Point(597, 307);
+            this.checkBox281.Name = "checkBox281";
+            this.checkBox281.Size = new System.Drawing.Size(39, 14);
+            this.checkBox281.TabIndex = 184;
+            this.checkBox281.UseVisualStyleBackColor = true;
+            // 
+            // checkBox282
+            // 
+            this.checkBox282.AutoSize = true;
+            this.checkBox282.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox282.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox282.Location = new System.Drawing.Point(597, 327);
+            this.checkBox282.Name = "checkBox282";
+            this.checkBox282.Size = new System.Drawing.Size(39, 14);
+            this.checkBox282.TabIndex = 184;
+            this.checkBox282.UseVisualStyleBackColor = true;
+            // 
+            // checkBox283
+            // 
+            this.checkBox283.AutoSize = true;
+            this.checkBox283.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox283.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox283.Location = new System.Drawing.Point(597, 407);
+            this.checkBox283.Name = "checkBox283";
+            this.checkBox283.Size = new System.Drawing.Size(39, 14);
+            this.checkBox283.TabIndex = 184;
+            this.checkBox283.UseVisualStyleBackColor = true;
+            // 
+            // checkBox284
+            // 
+            this.checkBox284.AutoSize = true;
+            this.checkBox284.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox284.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox284.Location = new System.Drawing.Point(597, 427);
+            this.checkBox284.Name = "checkBox284";
+            this.checkBox284.Size = new System.Drawing.Size(39, 14);
+            this.checkBox284.TabIndex = 184;
+            this.checkBox284.UseVisualStyleBackColor = true;
+            // 
+            // checkBox285
+            // 
+            this.checkBox285.AutoSize = true;
+            this.checkBox285.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox285.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox285.Location = new System.Drawing.Point(597, 447);
+            this.checkBox285.Name = "checkBox285";
+            this.checkBox285.Size = new System.Drawing.Size(39, 14);
+            this.checkBox285.TabIndex = 184;
+            this.checkBox285.UseVisualStyleBackColor = true;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label13.Location = new System.Drawing.Point(642, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(20, 24);
+            this.label13.TabIndex = 183;
+            this.label13.Text = "Inv";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // checkBox286
+            // 
+            this.checkBox286.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox286.AutoSize = true;
+            this.checkBox286.Location = new System.Drawing.Point(644, 27);
+            this.checkBox286.Name = "checkBox286";
+            this.checkBox286.Size = new System.Drawing.Size(15, 14);
+            this.checkBox286.TabIndex = 184;
+            this.checkBox286.UseVisualStyleBackColor = true;
+            // 
+            // checkBox287
+            // 
+            this.checkBox287.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox287.AutoSize = true;
+            this.checkBox287.Location = new System.Drawing.Point(644, 47);
+            this.checkBox287.Name = "checkBox287";
+            this.checkBox287.Size = new System.Drawing.Size(15, 14);
+            this.checkBox287.TabIndex = 184;
+            this.checkBox287.UseVisualStyleBackColor = true;
+            // 
+            // checkBox288
+            // 
+            this.checkBox288.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox288.AutoSize = true;
+            this.checkBox288.Location = new System.Drawing.Point(644, 67);
+            this.checkBox288.Name = "checkBox288";
+            this.checkBox288.Size = new System.Drawing.Size(15, 14);
+            this.checkBox288.TabIndex = 184;
+            this.checkBox288.UseVisualStyleBackColor = true;
+            // 
+            // checkBox289
+            // 
+            this.checkBox289.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox289.AutoSize = true;
+            this.checkBox289.Location = new System.Drawing.Point(644, 87);
+            this.checkBox289.Name = "checkBox289";
+            this.checkBox289.Size = new System.Drawing.Size(15, 14);
+            this.checkBox289.TabIndex = 184;
+            this.checkBox289.UseVisualStyleBackColor = true;
+            // 
+            // checkBox290
+            // 
+            this.checkBox290.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox290.AutoSize = true;
+            this.checkBox290.Location = new System.Drawing.Point(644, 267);
+            this.checkBox290.Name = "checkBox290";
+            this.checkBox290.Size = new System.Drawing.Size(15, 14);
+            this.checkBox290.TabIndex = 184;
+            this.checkBox290.UseVisualStyleBackColor = true;
+            // 
+            // checkBox291
+            // 
+            this.checkBox291.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox291.AutoSize = true;
+            this.checkBox291.Location = new System.Drawing.Point(644, 287);
+            this.checkBox291.Name = "checkBox291";
+            this.checkBox291.Size = new System.Drawing.Size(15, 14);
+            this.checkBox291.TabIndex = 184;
+            this.checkBox291.UseVisualStyleBackColor = true;
+            // 
+            // checkBox292
+            // 
+            this.checkBox292.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox292.AutoSize = true;
+            this.checkBox292.Location = new System.Drawing.Point(644, 307);
+            this.checkBox292.Name = "checkBox292";
+            this.checkBox292.Size = new System.Drawing.Size(15, 14);
+            this.checkBox292.TabIndex = 184;
+            this.checkBox292.UseVisualStyleBackColor = true;
+            // 
+            // checkBox293
+            // 
+            this.checkBox293.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox293.AutoSize = true;
+            this.checkBox293.Location = new System.Drawing.Point(644, 327);
+            this.checkBox293.Name = "checkBox293";
+            this.checkBox293.Size = new System.Drawing.Size(15, 14);
+            this.checkBox293.TabIndex = 184;
+            this.checkBox293.UseVisualStyleBackColor = true;
+            // 
+            // checkBox294
+            // 
+            this.checkBox294.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox294.AutoSize = true;
+            this.checkBox294.Location = new System.Drawing.Point(644, 407);
+            this.checkBox294.Name = "checkBox294";
+            this.checkBox294.Size = new System.Drawing.Size(15, 14);
+            this.checkBox294.TabIndex = 184;
+            this.checkBox294.UseVisualStyleBackColor = true;
+            // 
+            // checkBox295
+            // 
+            this.checkBox295.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox295.AutoSize = true;
+            this.checkBox295.Location = new System.Drawing.Point(644, 427);
+            this.checkBox295.Name = "checkBox295";
+            this.checkBox295.Size = new System.Drawing.Size(15, 14);
+            this.checkBox295.TabIndex = 184;
+            this.checkBox295.UseVisualStyleBackColor = true;
+            // 
+            // checkBox296
+            // 
+            this.checkBox296.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox296.AutoSize = true;
+            this.checkBox296.Location = new System.Drawing.Point(644, 447);
+            this.checkBox296.Name = "checkBox296";
+            this.checkBox296.Size = new System.Drawing.Size(15, 14);
+            this.checkBox296.TabIndex = 184;
+            this.checkBox296.UseVisualStyleBackColor = true;
+            // 
+            // checkBox297
+            // 
+            this.checkBox297.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox297.AutoSize = true;
+            this.checkBox297.Location = new System.Drawing.Point(644, 367);
+            this.checkBox297.Name = "checkBox297";
+            this.checkBox297.Size = new System.Drawing.Size(15, 14);
+            this.checkBox297.TabIndex = 184;
+            this.checkBox297.UseVisualStyleBackColor = true;
+            // 
+            // checkBox298
+            // 
+            this.checkBox298.AutoSize = true;
+            this.checkBox298.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox298.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox298.Location = new System.Drawing.Point(597, 367);
+            this.checkBox298.Name = "checkBox298";
+            this.checkBox298.Size = new System.Drawing.Size(39, 14);
+            this.checkBox298.TabIndex = 184;
+            this.checkBox298.UseVisualStyleBackColor = true;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -4152,13 +4481,12 @@ namespace Zanac.XBOX2NeoGeo
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnCount = 4;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 286F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 168F));
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanelCheck, 0, 1);
@@ -4169,7 +4497,10 @@ namespace Zanac.XBOX2NeoGeo
             this.tableLayoutPanel2.Controls.Add(this.label5, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.numericUpDownFireRate, 1, 4);
             this.tableLayoutPanel2.Controls.Add(this.checkBoxDinput, 2, 3);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanel2.Controls.Add(this.numericUpDown1, 3, 4);
+            this.tableLayoutPanel2.Controls.Add(this.label11, 2, 4);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 6;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -4178,7 +4509,7 @@ namespace Zanac.XBOX2NeoGeo
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(618, 594);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(688, 581);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // numericUpDownPort
@@ -4198,7 +4529,8 @@ namespace Zanac.XBOX2NeoGeo
             // checkBoxConn
             // 
             this.checkBoxConn.AutoSize = true;
-            this.checkBoxConn.Location = new System.Drawing.Point(335, 503);
+            this.tableLayoutPanel2.SetColumnSpan(this.checkBoxConn, 2);
+            this.checkBoxConn.Location = new System.Drawing.Point(357, 503);
             this.checkBoxConn.Name = "checkBoxConn";
             this.checkBoxConn.Size = new System.Drawing.Size(66, 16);
             this.checkBoxConn.TabIndex = 181;
@@ -4262,8 +4594,9 @@ namespace Zanac.XBOX2NeoGeo
             // 
             this.checkBoxDinput.AutoSize = true;
             this.checkBoxDinput.Checked = global::XBOX2NeoGeo.Properties.Settings.Default.DInput;
+            this.tableLayoutPanel2.SetColumnSpan(this.checkBoxDinput, 2);
             this.checkBoxDinput.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::XBOX2NeoGeo.Properties.Settings.Default, "DInput", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxDinput.Location = new System.Drawing.Point(334, 527);
+            this.checkBoxDinput.Location = new System.Drawing.Point(356, 527);
             this.checkBoxDinput.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDinput.Name = "checkBoxDinput";
             this.checkBoxDinput.Size = new System.Drawing.Size(201, 16);
@@ -4271,19 +4604,40 @@ namespace Zanac.XBOX2NeoGeo
             this.checkBoxDinput.Text = "Use DirectInput(1st Joystick only)";
             this.checkBoxDinput.UseVisualStyleBackColor = true;
             // 
-            // timerPole
+            // numericUpDown1
             // 
-            this.timerPole.Enabled = true;
-            this.timerPole.Interval = 16;
-            this.timerPole.Tick += new System.EventHandler(this.timerController_Tick);
+            this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::XBOX2NeoGeo.Properties.Settings.Default, "FrameRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.numericUpDown1.DecimalPlaces = 10;
+            this.numericUpDown1.Location = new System.Drawing.Point(451, 553);
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 19);
+            this.numericUpDown1.TabIndex = 3;
+            this.numericUpDown1.Value = global::XBOX2NeoGeo.Properties.Settings.Default.FrameRate;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label11.Location = new System.Drawing.Point(357, 550);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(88, 25);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "Frame Rate[Hz]:";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 596);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 581);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(642, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(688, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -4296,11 +4650,11 @@ namespace Zanac.XBOX2NeoGeo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(642, 618);
-            this.Controls.Add(this.statusStrip1);
+            this.ClientSize = new System.Drawing.Size(688, 603);
             this.Controls.Add(this.tableLayoutPanel2);
+            this.Controls.Add(this.statusStrip1);
             this.Name = "FormMain";
-            this.Text = "XBOX2NeoGeo V1.1";
+            this.Text = "XBOX2NeoGeo V1.2";
             this.tableLayoutPanelCheck.ResumeLayout(false);
             this.tableLayoutPanelCheck.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -4308,6 +4662,7 @@ namespace Zanac.XBOX2NeoGeo
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCtrlId)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFireRate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -4533,7 +4888,6 @@ namespace Zanac.XBOX2NeoGeo
         private System.Windows.Forms.CheckBox checkBox176;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericUpDownFireRate;
-        private System.Windows.Forms.Timer timerPole;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox checkBox177;
         private System.Windows.Forms.CheckBox checkBox178;
@@ -4640,6 +4994,34 @@ namespace Zanac.XBOX2NeoGeo
         private System.Windows.Forms.CheckBox checkBox274;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox checkBox275;
+        private System.Windows.Forms.CheckBox checkBox276;
+        private System.Windows.Forms.CheckBox checkBox277;
+        private System.Windows.Forms.CheckBox checkBox278;
+        private System.Windows.Forms.CheckBox checkBox279;
+        private System.Windows.Forms.CheckBox checkBox280;
+        private System.Windows.Forms.CheckBox checkBox281;
+        private System.Windows.Forms.CheckBox checkBox282;
+        private System.Windows.Forms.CheckBox checkBox283;
+        private System.Windows.Forms.CheckBox checkBox284;
+        private System.Windows.Forms.CheckBox checkBox285;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox checkBox286;
+        private System.Windows.Forms.CheckBox checkBox287;
+        private System.Windows.Forms.CheckBox checkBox288;
+        private System.Windows.Forms.CheckBox checkBox289;
+        private System.Windows.Forms.CheckBox checkBox290;
+        private System.Windows.Forms.CheckBox checkBox291;
+        private System.Windows.Forms.CheckBox checkBox292;
+        private System.Windows.Forms.CheckBox checkBox293;
+        private System.Windows.Forms.CheckBox checkBox294;
+        private System.Windows.Forms.CheckBox checkBox295;
+        private System.Windows.Forms.CheckBox checkBox296;
+        private System.Windows.Forms.CheckBox checkBox297;
+        private System.Windows.Forms.CheckBox checkBox298;
     }
 }
 

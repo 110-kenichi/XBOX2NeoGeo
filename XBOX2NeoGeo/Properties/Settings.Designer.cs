@@ -466,5 +466,17 @@ namespace XBOX2NeoGeo.Properties {
                 this["DInput"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public decimal FrameRate {
+            get {
+                return ((decimal)(this["FrameRate"]));
+            }
+            set {
+                this["FrameRate"] = value;
+            }
+        }
     }
 }

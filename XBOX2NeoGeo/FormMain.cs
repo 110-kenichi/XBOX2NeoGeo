@@ -31,6 +31,8 @@ namespace Zanac.XBOX2NeoGeo
         // High resolution timers to replace designer System.Windows.Forms.Timer
         private HighResolutionTimer hrRapidTimer;
 
+        private HighResolutionTimer hrPollingTimer;
+
         public FormMain()
         {
             InitializeComponent();
@@ -60,6 +62,7 @@ namespace Zanac.XBOX2NeoGeo
 
             // Rapid fire timer (uses numericUpDownFireRate in ms)
             UpdateRapidTimer();
+            UpdatePollingTimer();
         }
 
         private void UpdateRapidTimer()
@@ -77,6 +80,24 @@ namespace Zanac.XBOX2NeoGeo
                 catch { }
             }, intervalNs, useTimeBeginPeriod: true);
             hrRapidTimer.Start();
+        }
+
+
+        private void UpdatePollingTimer()
+        {
+            // recreate rapid timer with new interval
+            hrPollingTimer?.Stop();
+            long intervalNs = (long)(1_000_000_000m / numericUpDownFireRate.Value);
+            hrPollingTimer = new HighResolutionTimer(() =>
+            {
+                try
+                {
+                    if (!IsDisposed && !Disposing)
+                        BeginInvoke(new Action(() => timerController_Tick(this, EventArgs.Empty)));
+                }
+                catch { }
+            }, intervalNs, useTimeBeginPeriod: true);
+            hrPollingTimer.Start();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -107,15 +128,32 @@ namespace Zanac.XBOX2NeoGeo
             Settings.Default.Start = storeCheckStatus(22);
 
             // stop and dispose high resolution timers
-            try { hrRapidTimer?.Stop(); hrRapidTimer?.Dispose(); hrRapidTimer = null; } catch { }
+            try
+            {
+                hrRapidTimer?.Stop();
+                hrRapidTimer?.Dispose();
+                hrRapidTimer = null;
+            }
+            catch { }
+            try
+            {
+                hrPollingTimer?.Stop();
+                hrPollingTimer?.Dispose();
+                hrPollingTimer = null;
+            }
+            catch { }
         }
 
         private void restoreCheckStatus(int rowNo, int val)
         {
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 14; i++)
             {
+                if (i == 12)
+                    continue;
                 int stat = val & 0x3;
                 CheckBox cb = (CheckBox)tableLayoutPanelCheck.GetControlFromPosition(1 + i, rowNo);
+                if (cb == null)
+                    continue;
                 switch (stat)
                 {
                     case 0:
@@ -135,10 +173,15 @@ namespace Zanac.XBOX2NeoGeo
         private int storeCheckStatus(int rowNo)
         {
             int stat = 0;
-            for (int i = 11; i >= 0; i--)
+            for (int i = 13; i >= 0; i--)
             {
+                if (i == 12)
+                    continue;
+
                 stat = stat << 2;
                 CheckBox cb = (CheckBox)tableLayoutPanelCheck.GetControlFromPosition(1 + i, rowNo);
+                if (cb == null)
+                    continue;
                 switch (cb.CheckState)
                 {
                     case CheckState.Unchecked:
@@ -177,29 +220,6 @@ namespace Zanac.XBOX2NeoGeo
             }
             return stat;
         }
-
-        private uint processButton(int rowIdx, int columnIdx)
-        {
-            uint stat = 0;
-            {
-                CheckBox cb = (CheckBox)tableLayoutPanelCheck.GetControlFromPosition(1 + columnIdx, 1 + rowIdx);
-                switch (cb.CheckState)
-                {
-                    case CheckState.Unchecked:
-                        stat |= 0;
-                        break;
-                    case CheckState.Indeterminate:
-                        stat |= (uint)rapidFire;
-                        break;
-                    case CheckState.Checked:
-                        stat |= 1;
-                        break;
-                }
-            }
-            stat = stat << columnIdx;
-            return stat;
-        }
-
         //int cnt = 0;
 
         private int rapidFire;
@@ -260,91 +280,171 @@ namespace Zanac.XBOX2NeoGeo
             var bs = stat.ButtonState;
             //var lbs = lastGamePadState.ButtonState;
 
+            bs = processToggle(bs);
+
+            bs = processInvert(bs);
+
             if ((bs & ButtonStates.DPadUp) == ButtonStates.DPadUp)
                 bstat |= processButton(1);
-
+            tableLayoutPanelCheck.GetControlFromPosition(0, 1).BackColor = (bs & ButtonStates.DPadUp) == ButtonStates.DPadUp ? Color.LightGreen : SystemColors.Control;
             if ((bs & ButtonStates.DPadLeft) == ButtonStates.DPadLeft)
                 bstat |= processButton(2);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 2).BackColor = (bs & ButtonStates.DPadLeft) == ButtonStates.DPadLeft ? Color.LightGreen : SystemColors.Control;
             if ((bs & ButtonStates.DPadRight) == ButtonStates.DPadRight)
                 bstat |= processButton(3);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 3).BackColor = (bs & ButtonStates.DPadRight) == ButtonStates.DPadRight ? Color.LightGreen : SystemColors.Control;
             if ((bs & ButtonStates.DPadDown) == ButtonStates.DPadDown)
                 bstat |= processButton(4);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 4).BackColor = (bs & ButtonStates.DPadDown) == ButtonStates.DPadDown ? Color.LightGreen : SystemColors.Control;
+
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 5)).Checked && stat.ThumbSticks.Left.Y > 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Left.Y, 5);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 5).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Left.Y > 0.5)
+            {
                 bstat |= processButton(5);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 5).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 5).BackColor = SystemColors.Control;
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 6)).Checked && stat.ThumbSticks.Left.X < 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Left.X, 6);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 6).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Left.X < -0.5)
+            {
                 bstat |= processButton(6);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 6).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 6).BackColor = SystemColors.Control;
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 7)).Checked && stat.ThumbSticks.Left.X > 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Left.X, 7);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 7).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Left.X > 0.5)
+            {
                 bstat |= processButton(7);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 7).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 7).BackColor = SystemColors.Control;
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 8)).Checked && stat.ThumbSticks.Left.Y < 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Left.Y, 8);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 8).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Left.Y < -0.5)
+            {
                 bstat |= processButton(8);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 8).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 8).BackColor = SystemColors.Control;
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 9)).Checked && stat.ThumbSticks.Right.Y > 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Right.Y, 9);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 9).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Right.Y > 0.5)
+            {
                 bstat |= processButton(9);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 9).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 9).BackColor = SystemColors.Control;
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 10)).Checked && stat.ThumbSticks.Right.X < 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Right.X, 10);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 10).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Right.X < -0.5)
+            {
                 bstat |= processButton(10);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 10).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 10).BackColor = SystemColors.Control;
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 11)).Checked && stat.ThumbSticks.Right.X > 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Right.X, 11);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 11).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Right.X > 0.5)
+            {
                 bstat |= processButton(11);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 11).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 11).BackColor = SystemColors.Control;
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 12)).Checked && stat.ThumbSticks.Right.Y < 0)
             {
                 bstat |= processPseudoAnalog(stat.ThumbSticks.Right.Y, 12);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 12).BackColor = Color.LightGreen;
             }
             else if (stat.ThumbSticks.Right.Y < -0.5)
+            {
                 bstat |= processButton(12);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 12).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 12).BackColor = SystemColors.Control;
+
             if ((bs & ButtonStates.Y) == ButtonStates.Y)
                 bstat |= processButton(13);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 13).BackColor = (bs & ButtonStates.Y) == ButtonStates.Y ? Color.LightGreen : SystemColors.Control;
             if ((bs & ButtonStates.X) == ButtonStates.X)
                 bstat |= processButton(14);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 14).BackColor = (bs & ButtonStates.X) == ButtonStates.X ? Color.LightGreen : SystemColors.Control;
             if ((bs & ButtonStates.B) == ButtonStates.B)
                 bstat |= processButton(15);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 15).BackColor = (bs & ButtonStates.B) == ButtonStates.B ? Color.LightGreen : SystemColors.Control;
             if ((bs & ButtonStates.A) == ButtonStates.A)
                 bstat |= processButton(16);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 16).BackColor = (bs & ButtonStates.A) == ButtonStates.A ? Color.LightGreen : SystemColors.Control;
+
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 17)).Checked)
             {
                 bstat |= processPseudoAnalog(stat.Triggers.Left, 17);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 17).BackColor = Color.LightGreen;
             }
             else if (stat.Triggers.Left > 0.5)
+            {
                 bstat |= processButton(17);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 17).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 17).BackColor = SystemColors.Control;
             if ((bs & ButtonStates.LeftShoulder) == ButtonStates.LeftShoulder)
                 bstat |= processButton(18);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 18).BackColor = (bs & ButtonStates.LeftShoulder) == ButtonStates.LeftShoulder ? Color.LightGreen : SystemColors.Control;
+
             if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(13, 19)).Checked)
             {
                 bstat |= processPseudoAnalog(stat.Triggers.Right, 19);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 19).BackColor = Color.LightGreen;
             }
             else if (stat.Triggers.Right > 0.5)
+            {
                 bstat |= processButton(19);
+                tableLayoutPanelCheck.GetControlFromPosition(0, 19).BackColor = Color.LightGreen;
+            }
+            else
+                tableLayoutPanelCheck.GetControlFromPosition(0, 19).BackColor = SystemColors.Control;
             if ((bs & ButtonStates.RightShoulder) == ButtonStates.RightShoulder)
                 bstat |= processButton(20);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 20).BackColor = (bs & ButtonStates.RightShoulder) == ButtonStates.RightShoulder ? Color.LightGreen : SystemColors.Control;
+
             if ((bs & ButtonStates.Back) == ButtonStates.Back)
                 bstat |= processButton(21);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 21).BackColor = (bs & ButtonStates.Back) == ButtonStates.Back ? Color.LightGreen : SystemColors.Control;
             if ((bs & ButtonStates.Start) == ButtonStates.Start)
                 bstat |= processButton(22);
+            tableLayoutPanelCheck.GetControlFromPosition(0, 22).BackColor = (bs & ButtonStates.Start) == ButtonStates.Start ? Color.LightGreen : SystemColors.Control;
 
             bstat = ~bstat;
 
@@ -363,6 +463,299 @@ namespace Zanac.XBOX2NeoGeo
             ftdi.Write(ac_data, ac_data.Length, ref bytesWritten);
 
             lastGamePadState = stat;
+        }
+
+        private ButtonStates processToggle(ButtonStates bs)
+        {
+            Boolean toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 1)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 1)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 1).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.DPadUp) == ButtonStates.DPadUp))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.DPadUp;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 1).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 1)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 1).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 2)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 2)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 2).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.DPadLeft) == ButtonStates.DPadLeft))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.DPadLeft;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 2).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 2)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 2).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 3)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 3)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 3).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.DPadRight) == ButtonStates.DPadRight))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.DPadRight;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 3).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 3)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 3).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 4)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 4)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 4).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.DPadDown) == ButtonStates.DPadDown))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.DPadDown;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 4).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 4)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 4).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 13)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 13)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 13).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.Y) == ButtonStates.Y))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.Y;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 13).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 13)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 13).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 14)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 14)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 14).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.X) == ButtonStates.X))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.X;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 14).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 14)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 14).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 15)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 15)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 15).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.B) == ButtonStates.B))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.B;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 15).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 15)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 15).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 16)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 16)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 16).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.A) == ButtonStates.A))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.A;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 16).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 16)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 16).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 18)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 18)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 18).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.LeftShoulder) == ButtonStates.LeftShoulder))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.LeftShoulder;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 18).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 18)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 18).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 20)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 20)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 20).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.RightShoulder) == ButtonStates.RightShoulder))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.RightShoulder;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 20).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 20)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 20).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 21)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 21)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 21).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.Back) == ButtonStates.Back))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.Back;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 21).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 21)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 21).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+            toggleStat = false;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 22)).Checked)
+            {
+                toggleStat = ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 22)).Tag as Boolean? ?? false;
+                bool lastPressed = tableLayoutPanelCheck.GetControlFromPosition(0, 22).Tag as Boolean? ?? false;
+                if (((bs & ButtonStates.Start) == ButtonStates.Start))
+                {
+                    if (!lastPressed)
+                        toggleStat = !toggleStat;
+                    lastPressed = true;
+                }
+                else
+                {
+                    lastPressed = false;
+                }
+                if (toggleStat)
+                    bs |= ButtonStates.Start;
+                tableLayoutPanelCheck.GetControlFromPosition(0, 22).Tag = lastPressed;
+                ((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(14, 22)).Tag = toggleStat;
+            }
+            tableLayoutPanelCheck.GetControlFromPosition(14, 22).BackColor = toggleStat ? Color.LightGreen : SystemColors.Control;
+
+            return bs;
+        }
+
+        private ButtonStates processInvert(ButtonStates bs)
+        {
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 1)).Checked)
+                bs = bs ^ ButtonStates.DPadUp;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 2)).Checked)
+                bs = bs ^ ButtonStates.DPadLeft;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 3)).Checked)
+                bs = bs ^ ButtonStates.DPadRight;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 4)).Checked)
+                bs = bs ^ ButtonStates.DPadDown;
+
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 13)).Checked)
+                bs = bs ^ ButtonStates.Y;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 14)).Checked)
+                bs = bs ^ ButtonStates.X;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 15)).Checked)
+                bs = bs ^ ButtonStates.B;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 16)).Checked)
+                bs = bs ^ ButtonStates.A;
+
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 18)).Checked)
+                bs = bs ^ ButtonStates.LeftShoulder;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 20)).Checked)
+                bs = bs ^ ButtonStates.RightShoulder;
+
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 21)).Checked)
+                bs = bs ^ ButtonStates.Back;
+            if (((CheckBox)tableLayoutPanelCheck.GetControlFromPosition(15, 22)).Checked)
+                bs = bs ^ ButtonStates.Start;
+            return bs;
         }
 
         private string serialNumber;
@@ -414,6 +807,19 @@ namespace Zanac.XBOX2NeoGeo
             try
             {
                 UpdateRapidTimer();
+            }
+            catch
+            {
+                // no fallback to designer timer; hrRapidTimer expected
+            }
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            // Update high resolution rapid timer interval
+            try
+            {
+                UpdatePollingTimer();
             }
             catch
             {
